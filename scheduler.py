@@ -2,8 +2,7 @@ from apscheduler.schedulers.background import BackgroundScheduler # runs tasks i
 import os
 import requests
 from datetime import datetime, timedelta
-from config import config
-
+import time
 # allows us to specify a recurring time for execution
 scheduler = BackgroundScheduler()
 
@@ -23,12 +22,15 @@ def check_email():
 def vic_daily_tasks():
     print(f"running vic daily tasks")
     response = callvicapi("/api/daily")
-    config.logger.info(f"/api/daily: {response}")
 @scheduler.scheduled_job('cron', day_of_week='sun,mon,tue,wed,thu', hour=20, minute=0)
 def vic_calendar_tasks():
     tomorrow = datetime.now() + timedelta(days=1)
     response = callvicapi("/api/calendar/?date="+tomorrow.strftime("%Y-%m-%d"))
-    config.logger.info(f"/api/calendar: {response}")
 
-if os.getenv("SCHEDULED_TASKS_ENABLED") == 'TRUE':
+if __name__ == "__main__":
     scheduler.start()
+    try:
+        while True:
+            time.sleep(1)
+    except (KeyboardInterrupt, SystemExit):
+        scheduler.shutdown()
