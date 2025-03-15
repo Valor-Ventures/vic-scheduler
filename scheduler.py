@@ -3,6 +3,10 @@ import os
 import requests
 from datetime import datetime, timedelta
 import time
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # allows us to specify a recurring time for execution
 scheduler = BackgroundScheduler()
 
@@ -28,6 +32,7 @@ def vic_calendar_tasks():
     response = callvicapi("/api/calendar/?date="+tomorrow.strftime("%Y-%m-%d"))
 
 if __name__ == "__main__":
+    print("Starting scheduler")
     scheduler.start()
     try:
         while True:
