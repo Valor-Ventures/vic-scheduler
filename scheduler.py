@@ -29,7 +29,7 @@ def vic_daily_tasks():
 @scheduler.scheduled_job('cron', day_of_week='sun,mon,tue,wed,thu', hour=20, minute=0)
 def vic_calendar_tasks():
     tomorrow = datetime.now() + timedelta(days=1)
-    response = callvicapi("/api/calendar/?date="+tomorrow.strftime("%Y-%m-%d"))
+    response = callvicapi("/api/calendar?date="+tomorrow.strftime("%Y-%m-%d"))
 
 if __name__ == "__main__":
     print("Starting scheduler")
