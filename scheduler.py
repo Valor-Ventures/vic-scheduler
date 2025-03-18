@@ -4,7 +4,7 @@ import requests
 from datetime import datetime, timedelta
 import time
 from dotenv import load_dotenv
-
+import sentry_sdk
 load_dotenv()
 
 # allows us to specify a recurring time for execution
@@ -33,6 +33,12 @@ def vic_calendar_tasks():
 
 if __name__ == "__main__":
     print("Starting scheduler")
+    sentry_sdk.init(
+    dsn="https://ab479c2adc8863d82d53ab75150015db@o4508767931793409.ingest.us.sentry.io/4508998594461696",
+    # Add data like request headers and IP for users,
+    # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+    send_default_pii=True,
+)
     scheduler.start()
     try:
         while True:
