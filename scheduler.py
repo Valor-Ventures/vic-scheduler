@@ -10,8 +10,11 @@ load_dotenv()
 # allows us to specify a recurring time for execution
 scheduler = BackgroundScheduler()
 
-def callvicapi(url):
-    base_url = os.getenv("VIC_DJANGO_URL")
+def callvicapi(url,vic_instance :str = "vicbot"):
+    if vic_instance == "vicbot":
+        base_url = os.getenv("VICBOT_DJANGO_URL")
+    elif vic_instance == "vic20":
+        base_url = os.getenv("VIC20")
     headers = { "Authorization": f"Bearer {os.getenv('VIC_API_BEARER_TOKEN')}" }
     response = requests.get(base_url + url, headers=headers)
     return response.json()
@@ -20,6 +23,11 @@ def callvicapi(url):
 def check_email():
     print(f"checking email")
     return callvicapi("/api/checkemail")
+
+@scheduler.scheduled_job('interval', hour=1)
+def vic20_sfapi_ping():
+    print(f"vic20 sfapi ping")
+    return callvicapi("/api/startuprunway/ping",vic_instance="vic20")
 
 #sunday - thursday
 @scheduler.scheduled_job('cron', hour=21, minute=0)
