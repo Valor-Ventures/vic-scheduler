@@ -24,7 +24,7 @@ def check_email():
     print(f"checking email")
     return callvicapi("/api/checkemail")
 
-@scheduler.scheduled_job('interval', hour=1)
+@scheduler.scheduled_job('interval', hours=1)
 def vic20_sfapi_ping():
     print(f"vic20 sfapi ping")
     return callvicapi("/api/startuprunway/ping",vic_instance="vic20")
