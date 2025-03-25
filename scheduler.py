@@ -26,14 +26,22 @@ def check_email():
 
 @scheduler.scheduled_job('interval', hours=1)
 def vic20_sfapi_ping():
+    # purely to keep the SF connection alive
+    # this is a workaround for the SF connection dropping
     print(f"vic20 sfapi ping")
     return callvicapi("/api/startuprunway/ping",vic_instance="vic20")
 
 #sunday - thursday
-@scheduler.scheduled_job('cron', hour=21, minute=0)
+@scheduler.scheduled_job('cron', hour=18, minute=0)
 def vic_daily_tasks():
     print(f"running vic daily tasks")
     response = callvicapi("/api/daily")
+
+@scheduler.scheduled_job('cron', day_of_week='fri', hour=18, minute=30)
+def vic20_weekly_tasks():
+    print(f"running vic20 weekly fireflies email tasks")
+    response = callvicapi("/api/fireflies/week",vic_instance="vic20")
+    
 @scheduler.scheduled_job('cron', day_of_week='sun,mon,tue,wed,thu', hour=20, minute=0)
 def vic_calendar_tasks():
     tomorrow = datetime.now() + timedelta(days=1)
