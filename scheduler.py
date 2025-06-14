@@ -52,7 +52,7 @@ def vic20_weekly_tasks():
 @scheduler.scheduled_job('cron', day_of_week='sun,mon,tue,wed,thu', hour=20, minute=0)
 def vic_calendar_tasks():
     tomorrow = datetime.now() + timedelta(days=1)
-    callvicapi("/api/calendar?date=" + tomorrow.strftime("%Y-%m-%d"),vic_instance='vic20')
+    callvicapi("/api/calendar/senddaily?date=" + tomorrow.strftime("%Y-%m-%d"),vic_instance='vic20')
 
 
 if __name__ == "__main__":
