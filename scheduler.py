@@ -36,11 +36,11 @@ def vic20_sfapi_ping():
     return callvicapi("/api/startuprunway/ping",vic_instance="vic20")
 
 
-# sunday - thursday
+# daily
 @scheduler.scheduled_job('cron', hour=18, minute=0)
 def vic_daily_tasks():
     print("running vic daily tasks")
-    callvicapi("/api/daily")
+    callvicapi("/api/fireflies?days=1", vic_instance="vic20")
 
 
 @scheduler.scheduled_job('cron', day_of_week='fri', hour=18, minute=30)
